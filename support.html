@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gemod 技术支持 · Gemod Support</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      color: #111;
+    }
+    h1 { font-size: 1.5rem; margin-top: 0; }
+    h2 { font-size: 1.1rem; margin-top: 1.25rem; }
+    .lang-bar { margin: 0 0 1.25rem; font-size: 0.95rem; }
+    .lang-bar a { margin-right: 0.75rem; }
+    section { display: none; }
+    section.active { display: block; }
+    a { color: #0066cc; }
+    ul { padding-left: 1.2rem; }
+    .muted { color: #555; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <div class="lang-bar">
+    <a href="#" id="link-zh">中文</a>
+    <a href="#" id="link-en">English</a>
+  </div>
+
+  <section id="content-zh" lang="zh-Hans">
+    <h1>Gemod 技术支持</h1>
+    <p class="muted">最后更新：2026-04-30</p>
+
+    <h2>联系我们</h2>
+    <p>如遇到问题或需要协助，请发送邮件至：<a href="mailto:gemod1@163.com">gemod1@163.com</a></p>
+    <p>建议在邮件中说明：设备型号、系统版本、Gemod 版本、问题现象与截图（如有）。</p>
+
+    <h2>常见问题</h2>
+    <p><strong>无法连接 / 提示权限相关错误</strong></p>
+    <ul>
+      <li>在 iOS「设置 → VPN」中确认已允许 Gemod 的 VPN 配置。</li>
+      <li>删除 App 后重新安装，并在首次连接时同意系统弹窗授权。</li>
+      <li>确认主 App 与网络扩展（Network Extension）使用一致的签名与描述文件（开发者账号侧）。</li>
+    </ul>
+
+    <p><strong>导入订阅失败</strong></p>
+    <ul>
+      <li>确认订阅链接有效、可访问，且格式受本应用支持。</li>
+      <li>若使用相册/照片导入，请在系统设置中授予照片读取权限。</li>
+      <li>若使用扫码，请授予相机权限，并保证二维码清晰完整。</li>
+    </ul>
+
+    <p><strong>连接较慢或首次连接耗时</strong></p>
+    <ul>
+      <li>首次连接可能包含系统保存 VPN 配置、启动扩展等步骤，通常会比后续连接更慢。</li>
+      <li>可尝试切换网络或节点后重试。</li>
+    </ul>
+
+    <h2>隐私政策</h2>
+    <p>请参阅：<a href="index.html">Gemod 隐私政策</a>（同站点）。若需英文版，可在隐私政策页切换语言。</p>
+  </section>
+
+  <section id="content-en" lang="en">
+    <h1>Gemod Support</h1>
+    <p class="muted">Last updated: 2026-04-30</p>
+
+    <h2>Contact</h2>
+    <p>For help, email: <a href="mailto:gemod1@163.com">gemod1@163.com</a></p>
+    <p>Please include: device model, iOS version, Gemod version, what you tried, and screenshots if possible.</p>
+
+    <h2>FAQ</h2>
+    <p><strong>Cannot connect / permission errors</strong></p>
+    <ul>
+      <li>Check iOS Settings → VPN and ensure Gemod’s VPN configuration is allowed.</li>
+      <li>Delete and reinstall the app, then accept the system permission prompt on first connect.</li>
+      <li>Ensure the main app and the Network Extension target are signed with valid provisioning profiles.</li>
+    </ul>
+
+    <p><strong>Subscription import fails</strong></p>
+    <ul>
+      <li>Verify the subscription URL is reachable and supported by the app.</li>
+      <li>For photo import, grant Photo Library access in Settings.</li>
+      <li>For QR scanning, grant Camera access and ensure the QR code is clear.</li>
+    </ul>
+
+    <p><strong>Slow first connection</strong></p>
+    <ul>
+      <li>The first connect may take longer due to system VPN setup and extension cold start.</li>
+      <li>Try another network or endpoint and retry.</li>
+    </ul>
+
+    <h2>Privacy</h2>
+    <p>See: <a href="index.html">Gemod Privacy Policy</a> (same site). You can switch languages on that page.</p>
+  </section>
+
+  <script>
+    (function () {
+      var zh = document.getElementById("content-zh");
+      var en = document.getElementById("content-en");
+      var root = document.documentElement;
+
+      function prefersEnglish() {
+        var langs = navigator.languages && navigator.languages.length
+          ? navigator.languages
+          : [navigator.language || ""];
+        return langs.some(function (l) {
+          return (l || "").toLowerCase().indexOf("en") === 0;
+        });
+      }
+
+      function show(which) {
+        var isEn = which === "en";
+        zh.classList.toggle("active", !isEn);
+        en.classList.toggle("active", isEn);
+        root.lang = isEn ? "en" : "zh-Hans";
+        try {
+          localStorage.setItem("gemod_support_lang", which);
+        } catch (e) {}
+        history.replaceState(null, "", isEn ? "?lang=en" : "?lang=zh");
+      }
+
+      var saved = null;
+      try {
+        saved = localStorage.getItem("gemod_support_lang");
+      } catch (e) {}
+
+      var params = new URLSearchParams(location.search);
+      var q = params.get("lang");
+      if (q === "en" || q === "zh") {
+        show(q);
+      } else if (saved === "en" || saved === "zh") {
+        show(saved);
+      } else {
+        show(prefersEnglish() ? "en" : "zh");
+      }
+
+      document.getElementById("link-zh").addEventListener("click", function (e) {
+        e.preventDefault();
+        show("zh");
+      });
+      document.getElementById("link-en").addEventListener("click", function (e) {
+        e.preventDefault();
+        show("en");
+      });
+    })();
+  </script>
+</body>
+</html>
